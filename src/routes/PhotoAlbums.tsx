@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   InfiniteLoader,
@@ -7,6 +7,7 @@ import {
   type Index,
   type ListRowProps,
   AutoSizer,
+  ScrollParams,
 } from 'react-virtualized';
 import PhotoAlbumContext from '../context/photoAlbumContext';
 import PhotoAlbum from '../components/PhotoAlbum';
@@ -18,7 +19,8 @@ const pageSize = 10;
 export interface PhotoAlbumsProps {}
 
 const PhotoAlbums = (): JSX.Element => {
-  const { photoAlbums, setPhotoAlbums } = useContext(PhotoAlbumContext);
+  const { photoAlbums, setPhotoAlbums, scrollTop, setScrollTop } =
+    useContext(PhotoAlbumContext);
   const isRowLoaded = useCallback(
     ({ index }: Index): boolean => {
       return !!photoAlbums[index];
@@ -50,14 +52,23 @@ const PhotoAlbums = (): JSX.Element => {
         })
         .then((data: PhotoAlbumModel[]) => {
           return setPhotoAlbums((albums) => {
-            return range.reduce((newAlbums, _, index) => {
-              const albumIndex = index + startIndex;
-              return [
-                ...newAlbums.slice(0, albumIndex),
-                { status: 'success', data: data[index] },
-                ...newAlbums.slice(albumIndex + 1),
-              ];
-            }, albums);
+            return range.reduce<PhotoAlbumState['photoAlbums']>(
+              (newAlbums, _, index) => {
+                const albumIndex = index + startIndex;
+                const album = data[index];
+                return album
+                  ? [
+                      ...newAlbums.slice(0, albumIndex),
+                      {
+                        status: 'success',
+                        data: { ...album, favorite: false },
+                      },
+                      ...newAlbums.slice(albumIndex + 1),
+                    ]
+                  : newAlbums;
+              },
+              albums,
+            );
           });
         });
     },
@@ -75,6 +86,20 @@ const PhotoAlbums = (): JSX.Element => {
     [photoAlbums],
   );
 
+  const onScroll = useCallback(
+    (scrollParams: ScrollParams) => {
+      setScrollTop(scrollParams.scrollTop);
+    },
+    [setScrollTop],
+  );
+  const listRef = useRef<List | null>(null);
+  useEffect(() => {
+    if (scrollTop) {
+      listRef.current?.scrollToPosition(scrollTop);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
       <Link to="/">Favorites</Link>
@@ -91,11 +116,15 @@ const PhotoAlbums = (): JSX.Element => {
               <List
                 height={500}
                 onRowsRendered={onRowsRendered}
-                ref={registerChild}
+                ref={(ref) => {
+                  registerChild(ref);
+                  listRef.current = ref;
+                }}
                 rowCount={rowCount}
                 rowHeight={50}
                 rowRenderer={rowRenderer}
                 width={width}
+                onScroll={onScroll}
               />
             )}
           </AutoSizer>

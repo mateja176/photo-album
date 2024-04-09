@@ -14,4 +14,6 @@ export type PhotoAlbums = Array<ApiState<PhotoAlbumData>>;
 export interface PhotoAlbumState {
   photoAlbums: PhotoAlbums;
   setPhotoAlbums: Dispatch<SetStateAction<PhotoAlbums>>;
+  scrollTop: number;
+  setScrollTop: Dispatch<SetStateAction<number>>;
 }

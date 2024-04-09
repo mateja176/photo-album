@@ -3,9 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import 'react-virtualized/styles.css';
 import './App.css';
 import ErrorPage from './ErrorPage';
-import PhotoAlbumContext, {
-  initialPhotoAlbumState,
-} from './context/photoAlbumContext';
+import PhotoAlbumContext from './context/photoAlbumContext';
 import { PhotoAlbumState } from './models/photoAlbum';
 import Home from './routes/Home';
 import PhotoAlbums from './routes/PhotoAlbums';
@@ -24,16 +22,18 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const [scrollTop, setScrollTop] = useState(0);
   const [photoAlbums, setPhotoAlbums] = useState<
     PhotoAlbumState['photoAlbums']
   >([]);
   const context: PhotoAlbumState = useMemo(
     () => ({
-      ...initialPhotoAlbumState,
       photoAlbums,
       setPhotoAlbums,
+      scrollTop,
+      setScrollTop,
     }),
-    [photoAlbums],
+    [photoAlbums, scrollTop],
   );
   return (
     <PhotoAlbumContext.Provider value={context}>
