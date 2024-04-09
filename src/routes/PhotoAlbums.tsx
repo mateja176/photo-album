@@ -6,6 +6,7 @@ import {
   type IndexRange,
   type Index,
   type ListRowProps,
+  AutoSizer,
 } from 'react-virtualized';
 import PhotoAlbumContext from '../context/photoAlbumContext';
 import PhotoAlbum from '../components/PhotoAlbum';
@@ -85,15 +86,19 @@ const PhotoAlbums = (): JSX.Element => {
         threshold={10}
       >
         {({ onRowsRendered, registerChild }) => (
-          <List
-            height={200}
-            onRowsRendered={onRowsRendered}
-            ref={registerChild}
-            rowCount={rowCount}
-            rowHeight={20}
-            rowRenderer={rowRenderer}
-            width={300}
-          />
+          <AutoSizer>
+            {({ width }) => (
+              <List
+                height={500}
+                onRowsRendered={onRowsRendered}
+                ref={registerChild}
+                rowCount={rowCount}
+                rowHeight={50}
+                rowRenderer={rowRenderer}
+                width={width}
+              />
+            )}
+          </AutoSizer>
         )}
       </InfiniteLoader>
     </div>
