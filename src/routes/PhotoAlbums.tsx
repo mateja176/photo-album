@@ -162,6 +162,14 @@ const PhotoAlbums = (): JSX.Element => {
   }, []);
 
   return (
+    <div
+      style={{
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        paddingBottom: '8rem',
+      }}
+    >
       <div style={{ marginRight: 'auto' }}>
         <Link to="/">Back to home</Link>
       </div>
@@ -174,10 +182,10 @@ const PhotoAlbums = (): JSX.Element => {
       >
         {({ onRowsRendered, registerChild }) => (
           <AutoSizer>
-            {({ width }) => (
+            {({ width, height }) => (
               <List
                 style={{ marginTop: 5 }}
-                height={775}
+                height={height}
                 onRowsRendered={onRowsRendered}
                 ref={(ref) => {
                   registerChild(ref);
