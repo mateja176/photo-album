@@ -1,5 +1,7 @@
 .list {
   flex-grow: 1;
+  flex-basis: 0;
+  overflow: auto;
   display: flex;
   flex-direction: column;
   gap: 5px;
