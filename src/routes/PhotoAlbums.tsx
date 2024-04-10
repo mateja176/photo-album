@@ -183,7 +183,7 @@ const PhotoAlbums = (): JSX.Element => {
                   listRef.current = ref;
                 }}
                 rowCount={rowCount}
-                rowHeight={155}
+                rowHeight={150}
                 rowRenderer={rowRenderer}
                 width={width}
                 onScroll={onScroll}

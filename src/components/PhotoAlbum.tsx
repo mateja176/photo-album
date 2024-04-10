@@ -21,7 +21,6 @@ const PhotoAlbum = (props: PhotoAlbumProps): JSX.Element => {
           flexGrow: 1,
           display: 'flex',
           flexDirection: 'column',
-          paddingBottom: 5,
         }}
       >
         <p
