@@ -15,7 +15,6 @@ import { PhotoAlbumModel, PhotoAlbumState } from '../models/photoAlbum';
 import PhotoAlbumSkeleton from '../components/PhotoAlbumSkeleton';
 
 const rowCount = 50;
-const pageSize = 10;
 
 export interface PhotoAlbumsProps {}
 
@@ -31,8 +30,8 @@ const PhotoAlbums = (): JSX.Element => {
   const loadMoreRows = useCallback(
     ({ startIndex, stopIndex }: IndexRange) => {
       console.log({ startIndex, stopIndex });
+      const start = startIndex;
       const limit = stopIndex - startIndex + 1;
-      const page = (startIndex ? startIndex / pageSize : 0) + 1;
       const range = Array(limit).fill(0);
       setPhotoAlbums((albums) => {
         return range.reduce((newAlbums, _, index) => {
@@ -45,7 +44,7 @@ const PhotoAlbums = (): JSX.Element => {
         }, albums);
       });
       return fetch(
-        `https://jsonplaceholder.typicode.com/albums/1/photos?_page=${page}&_limit=${limit}`,
+        `https://jsonplaceholder.typicode.com/albums/1/photos?_start=${start}&_limit=${limit}`,
       )
         .then((response) => {
           // TODO validate data shape
