@@ -12,6 +12,8 @@ import {
 import PhotoAlbumContext from '../context/photoAlbumContext';
 import PhotoAlbum from '../components/PhotoAlbum';
 import { PhotoAlbumModel, PhotoAlbumState } from '../models/photoAlbum';
+import PhotoAlbumSkeleton from '../components/PhotoAlbumSkeleton';
+import PhotoAlbumError from '../components/PhotoAlbumError';
 
 const rowCount = 50;
 const pageSize = 10;
@@ -48,6 +50,9 @@ const PhotoAlbums = (): JSX.Element => {
       )
         .then((response) => {
           // TODO validate data shape
+          if (!response.ok) {
+            throw new Error('Failed to load batch of photo albums.');
+          }
           return response.json();
         })
         .then((data: PhotoAlbumModel[]) => {
@@ -66,6 +71,25 @@ const PhotoAlbums = (): JSX.Element => {
                       ...newAlbums.slice(albumIndex + 1),
                     ]
                   : newAlbums;
+              },
+              albums,
+            );
+          });
+        })
+        .catch((err) => {
+          return setPhotoAlbums((albums) => {
+            return range.reduce<PhotoAlbumState['photoAlbums']>(
+              (newAlbums, _, index) => {
+                const albumIndex = index + startIndex;
+                return [
+                  ...newAlbums.slice(0, albumIndex),
+                  {
+                    status: 'error',
+                    error:
+                      err instanceof Error ? err : new Error('Unknown error.'),
+                  },
+                  ...newAlbums.slice(albumIndex + 1),
+                ];
               },
               albums,
             );
@@ -95,7 +119,29 @@ const PhotoAlbums = (): JSX.Element => {
       return (
         <div key={key} style={style}>
           {album?.status === 'success' ? (
-            <PhotoAlbum {...album.data} onToggleFavorite={onToggleFavorite} />
+            <PhotoAlbum
+              url={album.data.thumbnailUrl}
+              id={album.data.id}
+              title={album.data.title}
+              actionText={
+                album.data.favorite
+                  ? 'Remove from favorites'
+                  : 'Add to favorites'
+              }
+              onToggleFavorite={onToggleFavorite}
+            />
+          ) : album?.status === 'loading' ? (
+            <PhotoAlbumSkeleton />
+          ) : album?.status === 'error' ? (
+            <PhotoAlbum
+              url={null}
+              id={index + 1}
+              title={album?.error.message}
+              actionText="Retry"
+              onToggleFavorite={() => {
+                // TODO
+              }}
+            />
           ) : null}
         </div>
       );
@@ -131,14 +177,15 @@ const PhotoAlbums = (): JSX.Element => {
           <AutoSizer>
             {({ width }) => (
               <List
-                height={500}
+                style={{ marginTop: 5 }}
+                height={775}
                 onRowsRendered={onRowsRendered}
                 ref={(ref) => {
                   registerChild(ref);
                   listRef.current = ref;
                 }}
                 rowCount={rowCount}
-                rowHeight={50}
+                rowHeight={155}
                 rowRenderer={rowRenderer}
                 width={width}
                 onScroll={onScroll}
