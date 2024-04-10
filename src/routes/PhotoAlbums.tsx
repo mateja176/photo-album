@@ -11,7 +11,7 @@ import {
 } from 'react-virtualized';
 import PhotoAlbumContext from '../context/photoAlbumContext';
 import PhotoAlbum from '../components/PhotoAlbum';
-import { PhotoAlbumModel } from '../models/photoAlbum';
+import { PhotoAlbumModel, PhotoAlbumState } from '../models/photoAlbum';
 
 const rowCount = 50;
 const pageSize = 10;
@@ -74,16 +74,33 @@ const PhotoAlbums = (): JSX.Element => {
     },
     [setPhotoAlbums],
   );
+  const onToggleFavorite = useCallback(
+    (id: PhotoAlbumModel['id']) => {
+      setPhotoAlbums((albums) =>
+        albums.map((album) =>
+          album?.status === 'success' && album.data.id === id
+            ? {
+                ...album,
+                data: { ...album.data, favorite: !album.data.favorite },
+              }
+            : album,
+        ),
+      );
+    },
+    [setPhotoAlbums],
+  );
   const rowRenderer = useCallback(
     ({ key, index, style }: ListRowProps) => {
       const album = photoAlbums[index];
       return (
         <div key={key} style={style}>
-          {album?.status === 'success' ? <PhotoAlbum {...album.data} /> : null}
+          {album?.status === 'success' ? (
+            <PhotoAlbum {...album.data} onToggleFavorite={onToggleFavorite} />
+          ) : null}
         </div>
       );
     },
-    [photoAlbums],
+    [photoAlbums, onToggleFavorite],
   );
 
   const onScroll = useCallback(
