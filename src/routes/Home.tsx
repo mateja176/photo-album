@@ -35,7 +35,11 @@ const Home = (): JSX.Element => {
       <Link to="/photo-albums">Photo Albums</Link>
       <ul>
         {favoriteAlbums.map((album) => (
-          <PhotoAlbum onToggleFavorite={onToggleFavorite} {...album} />
+          <PhotoAlbum
+            key={album.id}
+            onToggleFavorite={onToggleFavorite}
+            {...album}
+          />
         ))}
       </ul>
     </div>
