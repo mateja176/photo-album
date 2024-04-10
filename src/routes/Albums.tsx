@@ -19,7 +19,7 @@ const rowCount = 50;
 export interface AlbumsProps {}
 
 const Albums = (): JSX.Element => {
-  const { albums, setAlbums, scrollTop, setScrollTop } =
+  const { albums, setAlbums, onToggleFavorite, scrollTop, setScrollTop } =
     useContext(AlbumContext);
   const isRowLoaded = useCallback(
     ({ index }: Index): boolean => {
@@ -87,21 +87,6 @@ const Albums = (): JSX.Element => {
             }, currentAlbums);
           });
         });
-    },
-    [setAlbums],
-  );
-  const onToggleFavorite = useCallback(
-    (id: AlbumModel['id']) => {
-      setAlbums((currentAlbums) =>
-        currentAlbums.map((album) =>
-          album?.status === 'success' && album.data.id === id
-            ? {
-                ...album,
-                data: { ...album.data, favorite: !album.data.favorite },
-              }
-            : album,
-        ),
-      );
     },
     [setAlbums],
   );

@@ -14,6 +14,7 @@ export type Albums = Array<ApiState<AlbumData>>;
 export interface AlbumState {
   albums: Albums;
   setAlbums: Dispatch<SetStateAction<Albums>>;
+  onToggleFavorite: Dispatch<AlbumModel['id']>;
   scrollTop: number;
   setScrollTop: Dispatch<SetStateAction<number>>;
 }

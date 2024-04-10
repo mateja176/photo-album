@@ -4,6 +4,7 @@ import { AlbumState } from '../models/album';
 export const initialAlbumState: AlbumState = {
   albums: [],
   setAlbums: () => {},
+  onToggleFavorite: () => {},
   scrollTop: 0,
   setScrollTop: () => {},
 };

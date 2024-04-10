@@ -1,13 +1,13 @@
-import { useMemo, useContext, useCallback } from 'react';
+import { useMemo, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AlbumContext from '../context/albumContext';
 import Album from '../components/Album';
-import { AlbumData, AlbumModel } from '../models/album';
+import { AlbumData } from '../models/album';
 
 export interface HomeProps {}
 
 const Home = (): JSX.Element => {
-  const { albums, setAlbums } = useContext(AlbumContext);
+  const { albums, onToggleFavorite } = useContext(AlbumContext);
   const favoriteAlbums: AlbumData[] = useMemo(
     () =>
       albums.flatMap((album) =>
@@ -15,21 +15,7 @@ const Home = (): JSX.Element => {
       ),
     [albums],
   );
-  const onToggleFavorite = useCallback(
-    (id: AlbumModel['id']) => {
-      setAlbums((currentAlbums) =>
-        currentAlbums.map((album) =>
-          album?.status === 'success' && album.data.id === id
-            ? {
-                ...album,
-                data: { ...album.data, favorite: !album.data.favorite },
-              }
-            : album,
-        ),
-      );
-    },
-    [setAlbums],
-  );
+
   return (
     <div
       style={{
