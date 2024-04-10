@@ -13,7 +13,6 @@ import PhotoAlbumContext from '../context/photoAlbumContext';
 import PhotoAlbum from '../components/PhotoAlbum';
 import { PhotoAlbumModel, PhotoAlbumState } from '../models/photoAlbum';
 import PhotoAlbumSkeleton from '../components/PhotoAlbumSkeleton';
-import PhotoAlbumError from '../components/PhotoAlbumError';
 
 const rowCount = 50;
 const pageSize = 10;

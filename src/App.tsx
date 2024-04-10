@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import 'react-virtualized/styles.css';
-import './App.css';
 import ErrorPage from './ErrorPage';
 import PhotoAlbumContext from './context/photoAlbumContext';
 import { PhotoAlbumState } from './models/photoAlbum';
