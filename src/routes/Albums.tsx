@@ -1,4 +1,5 @@
 import { useCallback, useContext, useEffect, useRef } from 'react';
+import classes from './Route.module.scss';
 import { Link } from 'react-router-dom';
 import {
   InfiniteLoader,
@@ -141,20 +142,10 @@ const Albums = (): JSX.Element => {
   }, []);
 
   return (
-    <div
-      style={{
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        paddingBottom: '8rem',
-        paddingTop: '2rem',
-        paddingLeft: '2rem',
-      }}
-    >
-      <div style={{ marginRight: 'auto' }}>
+    <div className={classes['route']}>
+      <nav className={classes['navigation']}>
         <Link to="/">Back to home</Link>
-      </div>
+      </nav>
       <h1>Albums</h1>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}

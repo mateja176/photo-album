@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import AlbumContext from '../context/albumContext';
 import Album from '../components/Album';
 import { AlbumData } from '../models/album';
+import routeClasses from './Route.module.scss';
+import classes from './Home.module.scss';
 
 export interface HomeProps {}
 
@@ -17,20 +19,12 @@ const Home = (): JSX.Element => {
   );
 
   return (
-    <div
-      style={{
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        paddingBottom: '8rem',
-        paddingTop: '2rem',
-        paddingLeft: '2rem',
-      }}
-    >
-      <Link to="/list">The list</Link>
+    <div className={routeClasses['route']}>
+      <nav className={routeClasses['navigation']}>
+        <Link to="/list">The list</Link>
+      </nav>
       <h1>Favorites</h1>
-      <ul style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+      <ul className={classes['list']}>
         {favoriteAlbums.length ? (
           favoriteAlbums.map((album) => (
             <Album
