@@ -1,13 +1,13 @@
 import { Dispatch, MouseEventHandler, useCallback } from 'react';
-import { PhotoAlbumData } from '../models/photoAlbum';
+import { AlbumData } from '../models/album';
 
-export interface PhotoAlbumProps extends Pick<PhotoAlbumData, 'id' | 'title'> {
-  url: PhotoAlbumData['thumbnailUrl'] | null;
+export interface AlbumProps extends Pick<AlbumData, 'id' | 'title'> {
+  url: AlbumData['thumbnailUrl'] | null;
   actionText: string;
-  onAction: Dispatch<PhotoAlbumData['id']>;
+  onAction: Dispatch<AlbumData['id']>;
 }
 
-const PhotoAlbum = (props: PhotoAlbumProps): JSX.Element => {
+const Album = (props: AlbumProps): JSX.Element => {
   const onAction: MouseEventHandler = useCallback(() => {
     props.onAction(props.id);
   }, [props]);
@@ -44,4 +44,4 @@ const PhotoAlbum = (props: PhotoAlbumProps): JSX.Element => {
   );
 };
 
-export default PhotoAlbum;
+export default Album;

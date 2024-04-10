@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import 'react-virtualized/styles.css';
 import ErrorPage from './ErrorPage';
-import PhotoAlbumContext from './context/photoAlbumContext';
-import { PhotoAlbumState } from './models/photoAlbum';
+import AlbumContext from './context/albumContext';
+import { AlbumState } from './models/album';
 import Home from './routes/Home';
-import PhotoAlbums from './routes/PhotoAlbums';
+import Albums from './routes/Albums';
 
 const router = createBrowserRouter([
   {
@@ -15,29 +15,27 @@ const router = createBrowserRouter([
   },
   {
     path: '/list',
-    Component: PhotoAlbums,
+    Component: Albums,
     errorElement: <ErrorPage />,
   },
 ]);
 
 function App() {
   const [scrollTop, setScrollTop] = useState(0);
-  const [photoAlbums, setPhotoAlbums] = useState<
-    PhotoAlbumState['photoAlbums']
-  >([]);
-  const context: PhotoAlbumState = useMemo(
+  const [albums, setAlbums] = useState<AlbumState['albums']>([]);
+  const context: AlbumState = useMemo(
     () => ({
-      photoAlbums,
-      setPhotoAlbums,
+      albums,
+      setAlbums,
       scrollTop,
       setScrollTop,
     }),
-    [photoAlbums, scrollTop],
+    [albums, scrollTop],
   );
   return (
-    <PhotoAlbumContext.Provider value={context}>
+    <AlbumContext.Provider value={context}>
       <RouterProvider router={router} />
-    </PhotoAlbumContext.Provider>
+    </AlbumContext.Provider>
   );
 }
 

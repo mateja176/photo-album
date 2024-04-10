@@ -9,23 +9,23 @@ import {
   AutoSizer,
   ScrollParams,
 } from 'react-virtualized';
-import PhotoAlbumContext from '../context/photoAlbumContext';
-import PhotoAlbum from '../components/PhotoAlbum';
-import { PhotoAlbumModel, PhotoAlbumState } from '../models/photoAlbum';
-import PhotoAlbumSkeleton from '../components/PhotoAlbumSkeleton';
+import AlbumContext from '../context/albumContext';
+import Album from '../components/Album';
+import { AlbumModel, AlbumState } from '../models/album';
+import AlbumSkeleton from '../components/AlbumSkeleton';
 
 const rowCount = 50;
 
-export interface PhotoAlbumsProps {}
+export interface AlbumsProps {}
 
-const PhotoAlbums = (): JSX.Element => {
-  const { photoAlbums, setPhotoAlbums, scrollTop, setScrollTop } =
-    useContext(PhotoAlbumContext);
+const Albums = (): JSX.Element => {
+  const { albums, setAlbums, scrollTop, setScrollTop } =
+    useContext(AlbumContext);
   const isRowLoaded = useCallback(
     ({ index }: Index): boolean => {
-      return !!photoAlbums[index];
+      return !!albums[index];
     },
-    [photoAlbums],
+    [albums],
   );
   const loadMoreRows = useCallback(
     ({ startIndex, stopIndex }: IndexRange) => {
@@ -33,7 +33,7 @@ const PhotoAlbums = (): JSX.Element => {
       const start = startIndex;
       const limit = stopIndex - startIndex + 1;
       const range = Array(limit).fill(0);
-      setPhotoAlbums((albums) => {
+      setAlbums((currentAlbums) => {
         return range.reduce((newAlbums, _, index) => {
           const albumIndex = index + startIndex;
           return [
@@ -41,7 +41,7 @@ const PhotoAlbums = (): JSX.Element => {
             { status: 'loading' },
             ...newAlbums.slice(albumIndex + 1),
           ];
-        }, albums);
+        }, currentAlbums);
       });
       return fetch(
         `https://jsonplaceholder.typicode.com/albums/1/photos?_start=${start}&_limit=${limit}`,
@@ -49,57 +49,51 @@ const PhotoAlbums = (): JSX.Element => {
         .then((response) => {
           // TODO validate data shape
           if (!response.ok) {
-            throw new Error('Failed to load batch of photo albums.');
+            throw new Error('Failed to load batch of albums.');
           }
           return response.json();
         })
-        .then((data: PhotoAlbumModel[]) => {
-          return setPhotoAlbums((albums) => {
-            return range.reduce<PhotoAlbumState['photoAlbums']>(
-              (newAlbums, _, index) => {
-                const albumIndex = index + startIndex;
-                const album = data[index];
-                return album
-                  ? [
-                      ...newAlbums.slice(0, albumIndex),
-                      {
-                        status: 'success',
-                        data: { ...album, favorite: false },
-                      },
-                      ...newAlbums.slice(albumIndex + 1),
-                    ]
-                  : newAlbums;
-              },
-              albums,
-            );
+        .then((data: AlbumModel[]) => {
+          return setAlbums((currentAlbums) => {
+            return range.reduce<AlbumState['albums']>((newAlbums, _, index) => {
+              const albumIndex = index + startIndex;
+              const album = data[index];
+              return album
+                ? [
+                    ...newAlbums.slice(0, albumIndex),
+                    {
+                      status: 'success',
+                      data: { ...album, favorite: false },
+                    },
+                    ...newAlbums.slice(albumIndex + 1),
+                  ]
+                : newAlbums;
+            }, currentAlbums);
           });
         })
         .catch((err) => {
-          return setPhotoAlbums((albums) => {
-            return range.reduce<PhotoAlbumState['photoAlbums']>(
-              (newAlbums, _, index) => {
-                const albumIndex = index + startIndex;
-                return [
-                  ...newAlbums.slice(0, albumIndex),
-                  {
-                    status: 'error',
-                    error:
-                      err instanceof Error ? err : new Error('Unknown error.'),
-                  },
-                  ...newAlbums.slice(albumIndex + 1),
-                ];
-              },
-              albums,
-            );
+          return setAlbums((currentAlbums) => {
+            return range.reduce<AlbumState['albums']>((newAlbums, _, index) => {
+              const albumIndex = index + startIndex;
+              return [
+                ...newAlbums.slice(0, albumIndex),
+                {
+                  status: 'error',
+                  error:
+                    err instanceof Error ? err : new Error('Unknown error.'),
+                },
+                ...newAlbums.slice(albumIndex + 1),
+              ];
+            }, currentAlbums);
           });
         });
     },
-    [setPhotoAlbums],
+    [setAlbums],
   );
   const onToggleFavorite = useCallback(
-    (id: PhotoAlbumModel['id']) => {
-      setPhotoAlbums((albums) =>
-        albums.map((album) =>
+    (id: AlbumModel['id']) => {
+      setAlbums((currentAlbums) =>
+        currentAlbums.map((album) =>
           album?.status === 'success' && album.data.id === id
             ? {
                 ...album,
@@ -109,15 +103,15 @@ const PhotoAlbums = (): JSX.Element => {
         ),
       );
     },
-    [setPhotoAlbums],
+    [setAlbums],
   );
   const rowRenderer = useCallback(
     ({ key, index, style }: ListRowProps) => {
-      const album = photoAlbums[index];
+      const album = albums[index];
       return (
         <div key={key} style={style}>
           {album?.status === 'success' ? (
-            <PhotoAlbum
+            <Album
               url={album.data.thumbnailUrl}
               id={album.data.id}
               title={album.data.title}
@@ -129,9 +123,9 @@ const PhotoAlbums = (): JSX.Element => {
               onAction={onToggleFavorite}
             />
           ) : album?.status === 'loading' ? (
-            <PhotoAlbumSkeleton />
+            <AlbumSkeleton />
           ) : album?.status === 'error' ? (
-            <PhotoAlbum
+            <Album
               url={null}
               id={index + 1}
               title={album?.error.message}
@@ -144,7 +138,7 @@ const PhotoAlbums = (): JSX.Element => {
         </div>
       );
     },
-    [photoAlbums, onToggleFavorite],
+    [albums, onToggleFavorite],
   );
 
   const onScroll = useCallback(
@@ -176,7 +170,7 @@ const PhotoAlbums = (): JSX.Element => {
       <div style={{ marginRight: 'auto' }}>
         <Link to="/">Back to home</Link>
       </div>
-      <h1>Photo Albums</h1>
+      <h1>Albums</h1>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
         loadMoreRows={loadMoreRows}
@@ -209,4 +203,4 @@ const PhotoAlbums = (): JSX.Element => {
   );
 };
 
-export default PhotoAlbums;
+export default Albums;

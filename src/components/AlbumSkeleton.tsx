@@ -1,6 +1,6 @@
-export interface PhotoAlbumSkeletonProps {}
+export interface AlbumSkeletonProps {}
 
-const PhotoAlbumSkeleton = (): JSX.Element => {
+const AlbumSkeleton = (): JSX.Element => {
   return (
     <li style={{ display: 'flex', columnGap: '1rem' }}>
       <div style={{ width: 150, height: 150, backgroundColor: 'lightgrey' }} />
@@ -46,4 +46,4 @@ const PhotoAlbumSkeleton = (): JSX.Element => {
   );
 };
 
-export default PhotoAlbumSkeleton;
+export default AlbumSkeleton;

@@ -1,24 +1,24 @@
 import { useMemo, useContext, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import PhotoAlbumContext from '../context/photoAlbumContext';
-import PhotoAlbum from '../components/PhotoAlbum';
-import { PhotoAlbumData, PhotoAlbumModel } from '../models/photoAlbum';
+import AlbumContext from '../context/albumContext';
+import Album from '../components/Album';
+import { AlbumData, AlbumModel } from '../models/album';
 
 export interface HomeProps {}
 
 const Home = (): JSX.Element => {
-  const { photoAlbums, setPhotoAlbums } = useContext(PhotoAlbumContext);
-  const favoriteAlbums: PhotoAlbumData[] = useMemo(
+  const { albums, setAlbums } = useContext(AlbumContext);
+  const favoriteAlbums: AlbumData[] = useMemo(
     () =>
-      photoAlbums.flatMap((album) =>
+      albums.flatMap((album) =>
         album?.status === 'success' && album.data.favorite ? album.data : [],
       ),
-    [photoAlbums],
+    [albums],
   );
   const onToggleFavorite = useCallback(
-    (id: PhotoAlbumModel['id']) => {
-      setPhotoAlbums((albums) =>
-        albums.map((album) =>
+    (id: AlbumModel['id']) => {
+      setAlbums((currentAlbums) =>
+        currentAlbums.map((album) =>
           album?.status === 'success' && album.data.id === id
             ? {
                 ...album,
@@ -28,7 +28,7 @@ const Home = (): JSX.Element => {
         ),
       );
     },
-    [setPhotoAlbums],
+    [setAlbums],
   );
   return (
     <div
@@ -47,7 +47,7 @@ const Home = (): JSX.Element => {
       <ul style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
         {favoriteAlbums.length ? (
           favoriteAlbums.map((album) => (
-            <PhotoAlbum
+            <Album
               key={album.id}
               url={album.thumbnailUrl}
               id={album.id}
