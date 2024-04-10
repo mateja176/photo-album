@@ -167,7 +167,6 @@ const Albums = (): JSX.Element => {
           <AutoSizer>
             {({ width, height }) => (
               <List
-                style={{ marginTop: 5 }}
                 height={height}
                 onRowsRendered={onRowsRendered}
                 ref={(ref) => {
