@@ -1,5 +1,6 @@
 import { useCallback, useContext, useEffect, useRef } from 'react';
-import classes from './Route.module.scss';
+import routeClasses from './Route.module.scss';
+import classes from './Albums.module.scss';
 import { Link } from 'react-router-dom';
 import {
   InfiniteLoader,
@@ -142,38 +143,40 @@ const Albums = (): JSX.Element => {
   }, []);
 
   return (
-    <div className={classes['route']}>
-      <nav className={classes['navigation']}>
+    <div className={routeClasses['route']}>
+      <nav className={routeClasses['navigation']}>
         <Link to="/">Back to home</Link>
       </nav>
       <h1>Albums</h1>
-      <InfiniteLoader
-        isRowLoaded={isRowLoaded}
-        loadMoreRows={loadMoreRows}
-        rowCount={rowCount}
-        minimumBatchSize={10}
-        threshold={10}
-      >
-        {({ onRowsRendered, registerChild }) => (
-          <AutoSizer>
-            {({ width, height }) => (
-              <List
-                height={height}
-                onRowsRendered={onRowsRendered}
-                ref={(ref) => {
-                  registerChild(ref);
-                  listRef.current = ref;
-                }}
-                rowCount={rowCount}
-                rowHeight={155}
-                rowRenderer={rowRenderer}
-                width={width}
-                onScroll={onScroll}
-              />
-            )}
-          </AutoSizer>
-        )}
-      </InfiniteLoader>
+      <div className={classes['infinite-list']}>
+        <InfiniteLoader
+          isRowLoaded={isRowLoaded}
+          loadMoreRows={loadMoreRows}
+          rowCount={rowCount}
+          minimumBatchSize={10}
+          threshold={10}
+        >
+          {({ onRowsRendered, registerChild }) => (
+            <AutoSizer>
+              {({ width, height }) => (
+                <List
+                  height={height}
+                  onRowsRendered={onRowsRendered}
+                  ref={(ref) => {
+                    registerChild(ref);
+                    listRef.current = ref;
+                  }}
+                  rowCount={rowCount}
+                  rowHeight={155}
+                  rowRenderer={rowRenderer}
+                  width={width}
+                  onScroll={onScroll}
+                />
+              )}
+            </AutoSizer>
+          )}
+        </InfiniteLoader>
+      </div>
     </div>
   );
 };
