@@ -162,8 +162,9 @@ const PhotoAlbums = (): JSX.Element => {
   }, []);
 
   return (
-    <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-      <Link to="/">Back to home</Link>
+      <div style={{ marginRight: 'auto' }}>
+        <Link to="/">Back to home</Link>
+      </div>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
         loadMoreRows={loadMoreRows}
