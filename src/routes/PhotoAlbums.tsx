@@ -167,12 +167,16 @@ const PhotoAlbums = (): JSX.Element => {
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
+        gap: '1rem',
         paddingBottom: '8rem',
+        paddingTop: '2rem',
+        paddingLeft: '2rem',
       }}
     >
       <div style={{ marginRight: 'auto' }}>
         <Link to="/">Back to home</Link>
       </div>
+      <h1>Photo Albums</h1>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
         loadMoreRows={loadMoreRows}
@@ -192,7 +196,7 @@ const PhotoAlbums = (): JSX.Element => {
                   listRef.current = ref;
                 }}
                 rowCount={rowCount}
-                rowHeight={150}
+                rowHeight={155}
                 rowRenderer={rowRenderer}
                 width={width}
                 onScroll={onScroll}

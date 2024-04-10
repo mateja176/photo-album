@@ -31,21 +31,38 @@ const Home = (): JSX.Element => {
     [setPhotoAlbums],
   );
   return (
-    <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-      <Link to="/list">List</Link>
-      <ul>
-        {favoriteAlbums.map((album) => (
-          <PhotoAlbum
-            key={album.id}
-            url={album.thumbnailUrl}
-            id={album.id}
-            title={album.title}
-            actionText={
-              album.favorite ? 'Remove from favorites' : 'Add to favorites'
-            }
-            onAction={onToggleFavorite}
-          />
-        ))}
+    <div
+      style={{
+        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        paddingBottom: '8rem',
+        paddingTop: '2rem',
+        paddingLeft: '2rem',
+      }}
+    >
+      <Link to="/list">The list</Link>
+      <h1>Favorites</h1>
+      <ul style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+        {favoriteAlbums.length ? (
+          favoriteAlbums.map((album) => (
+            <PhotoAlbum
+              key={album.id}
+              url={album.thumbnailUrl}
+              id={album.id}
+              title={album.title}
+              actionText={
+                album.favorite ? 'Remove from favorites' : 'Add to favorites'
+              }
+              onAction={onToggleFavorite}
+            />
+          ))
+        ) : (
+          <p>
+            Visit <Link to="/list">the list</Link> to add albums to favorites.
+          </p>
+        )}
       </ul>
     </div>
   );
