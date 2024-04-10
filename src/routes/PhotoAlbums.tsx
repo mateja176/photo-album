@@ -119,7 +119,7 @@ const PhotoAlbums = (): JSX.Element => {
 
   return (
     <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-      <Link to="/">Favorites</Link>
+      <Link to="/">Back to home</Link>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
         loadMoreRows={loadMoreRows}

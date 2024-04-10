@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: '/photo-albums',
+    path: '/list',
     Component: PhotoAlbums,
     errorElement: <ErrorPage />,
   },

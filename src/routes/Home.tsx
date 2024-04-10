@@ -32,7 +32,7 @@ const Home = (): JSX.Element => {
   );
   return (
     <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-      <Link to="/photo-albums">Photo Albums</Link>
+      <Link to="/list">List</Link>
       <ul>
         {favoriteAlbums.map((album) => (
           <PhotoAlbum
