@@ -4,12 +4,12 @@ import { PhotoAlbumData } from '../models/photoAlbum';
 export interface PhotoAlbumProps extends Pick<PhotoAlbumData, 'id' | 'title'> {
   url: PhotoAlbumData['thumbnailUrl'] | null;
   actionText: string;
-  onToggleFavorite: Dispatch<PhotoAlbumData['id']>;
+  onAction: Dispatch<PhotoAlbumData['id']>;
 }
 
 const PhotoAlbum = (props: PhotoAlbumProps): JSX.Element => {
-  const onToggleFavorite: MouseEventHandler = useCallback(() => {
-    props.onToggleFavorite(props.id);
+  const onAction: MouseEventHandler = useCallback(() => {
+    props.onAction(props.id);
   }, [props]);
   return (
     <li style={{ display: 'flex', columnGap: '1rem' }}>
@@ -37,7 +37,7 @@ const PhotoAlbum = (props: PhotoAlbumProps): JSX.Element => {
             alignSelf: 'flex-start',
           }}
         >
-          <button onClick={onToggleFavorite}>{props.actionText}</button>
+          <button onClick={onAction}>{props.actionText}</button>
         </div>
       </div>
     </li>

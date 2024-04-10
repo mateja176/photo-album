@@ -37,8 +37,13 @@ const Home = (): JSX.Element => {
         {favoriteAlbums.map((album) => (
           <PhotoAlbum
             key={album.id}
-            onToggleFavorite={onToggleFavorite}
-            {...album}
+            url={album.thumbnailUrl}
+            id={album.id}
+            title={album.title}
+            actionText={
+              album.favorite ? 'Remove from favorites' : 'Add to favorites'
+            }
+            onAction={onToggleFavorite}
           />
         ))}
       </ul>

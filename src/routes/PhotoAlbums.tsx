@@ -126,7 +126,7 @@ const PhotoAlbums = (): JSX.Element => {
                   ? 'Remove from favorites'
                   : 'Add to favorites'
               }
-              onToggleFavorite={onToggleFavorite}
+              onAction={onToggleFavorite}
             />
           ) : album?.status === 'loading' ? (
             <PhotoAlbumSkeleton />
@@ -136,7 +136,7 @@ const PhotoAlbums = (): JSX.Element => {
               id={index + 1}
               title={album?.error.message}
               actionText="Retry"
-              onToggleFavorite={() => {
+              onAction={() => {
                 // TODO
               }}
             />
